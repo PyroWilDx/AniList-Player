@@ -16,17 +16,11 @@
         },
         "default_popup": "src/popup/Popup.html"
     },
-    "host_permissions": [
-        "https://anilist.co/*"
-    ],
+    "host_permissions": ["https://anilist.co/*"],
     "content_scripts": [
         {
-            "matches": [
-                "https://anilist.co/*"
-            ],
-            "js": [
-                "dist/Main.js"
-            ]
+            "matches": ["https://anilist.co/*"],
+            "js": ["dist/Main.js"]
         }
     ]
 }
