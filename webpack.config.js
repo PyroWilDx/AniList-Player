@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/Main.ts",
+    entry: "./src/content/Main.ts",
     output: {
         filename: "Main.js",
         path: path.resolve(__dirname, "dist"),
