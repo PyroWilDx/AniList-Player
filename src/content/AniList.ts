@@ -25,7 +25,7 @@ export default class AniList {
         });
     }
 
-    public static GetAnimeId(entryRow: HTMLElement): string | null {
+    public static GetEntryRowInfo(entryRow: HTMLElement): EntryRowInfo | null {
         const titleEl = entryRow.querySelector(".title");
         if (!titleEl) {
             console.error("AniList-Player: Could not find .title element in .entry.row element.", entryRow);
@@ -38,28 +38,45 @@ export default class AniList {
             return null;
         }
 
-        const animeIdMatch = titleAnchorEl.href.match(/\/anime\/(\d+)\//);
-        if (!animeIdMatch) {
-            console.error("AniList-Player: Could not find anime id from hRef of <a> element.", titleAnchorEl);
-            return null;
-        }
-
-        return animeIdMatch[1];
-    }
-
-    public static GetUserProgress(entryRow: HTMLElement): string | null {
         const progressEl = entryRow.querySelector(".progress");
         if (!progressEl) {
             console.error("AniList-Player: Could not find .progress element in .entry.row element.", entryRow);
             return null;
         }
 
-        const progressElTextContent = progressEl.textContent;
-        if (!progressElTextContent) {
-            console.error("AniList-Player: Could not find textContent in .progress element.", progressEl);
+        return {
+            titleEl: titleEl,
+            titleAnchorEl: titleAnchorEl,
+            progressEl: progressEl,
+        };
+    }
+
+    public static GetAnimeId(entryRowInfo: EntryRowInfo): string | null {
+        const regExpMatchArray = entryRowInfo.titleAnchorEl.href.match(/\/anime\/(\d+)\//);
+        if (!regExpMatchArray) {
+            console.error(
+                "AniList-Player: Could not find anime id from hRef of <a> element.",
+                entryRowInfo.titleAnchorEl,
+            );
             return null;
         }
 
-        return progressElTextContent.replace("+", "").trim().split("/")[0];
+        return regExpMatchArray[1];
+    }
+
+    public static GetUserProgress(entryRowInfo: EntryRowInfo): string | null {
+        const textContent = entryRowInfo.progressEl.textContent;
+        if (!textContent) {
+            console.error("AniList-Player: Could not find textContent in .progress element.", entryRowInfo.progressEl);
+            return null;
+        }
+
+        return textContent.replace("+", "").trim().split("/")[0];
     }
 }
+
+type EntryRowInfo = {
+    titleEl: Element;
+    titleAnchorEl: HTMLAnchorElement;
+    progressEl: Element;
+};
