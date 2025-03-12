@@ -1,4 +1,5 @@
 import AniListScraper from "./AniListScraper";
+import ConsumetClient from "./ConsumetClient";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
@@ -14,11 +15,15 @@ export default class AniListPlayer {
 
         const playButton = document.createElement("button");
         playButton.textContent = "Play";
-        playButton.addEventListener("click", () => {
+        playButton.addEventListener("click", async () => {
             const episodeProgress = AniListScraper.GetEpisodeProgress(entryRowChildren);
             if (!episodeProgress) {
                 return;
             }
+
+            const episodeNumber = episodeProgress + 1;
+            const episode = await ConsumetClient.GetEpisode(aniListId, episodeNumber);
+            console.log(episode);
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
