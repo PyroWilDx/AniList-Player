@@ -1,5 +1,6 @@
 import AniListScraper from "./AniListScraper";
-import ConsumetClient from "./ConsumetClient";
+import ConsumetAniListClient from "./ConsumetAniListClient";
+import ConsumetZoroClient from "./ConsumetZoroClient";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
@@ -22,8 +23,13 @@ export default class AniListPlayer {
             }
 
             const episodeNumber = episodeProgress + 1;
-            const episode = await ConsumetClient.GetEpisode(aniListId, episodeNumber);
-            console.log(episode);
+            const episode = await ConsumetAniListClient.GetEpisode(aniListId, episodeNumber);
+            if (!episode) {
+                return;
+            }
+
+            const episodeSources = await ConsumetZoroClient.GetEpisodeSources(episode.id);
+            console.log(episodeSources);
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
