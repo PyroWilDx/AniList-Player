@@ -1,8 +1,8 @@
-import AniList from "./AniList";
 import AniListPlayer from "./AniListPlayer";
+import AniListScraper from "./AniListScraper";
 
 console.log("AniList-Player Started.");
 
-AniList.WatchEntryRow((entryRow) => {
+AniListScraper.WatchEntryRow((entryRow) => {
     AniListPlayer.GeneratePlayButton(entryRow);
 });

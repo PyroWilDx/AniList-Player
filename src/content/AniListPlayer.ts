@@ -1,23 +1,26 @@
-import AniList from "./AniList";
+import AniListScraper from "./AniListScraper";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
-        const entryRowInfo = AniList.GetEntryRowInfo(entryRow);
-        if (!entryRowInfo) {
+        const entryRowChildren = AniListScraper.GetEntryRowChildren(entryRow);
+        if (!entryRowChildren) {
+            return;
+        }
+
+        const aniListId = AniListScraper.GetAniListId(entryRowChildren);
+        if (!aniListId) {
             return;
         }
 
         const playButton = document.createElement("button");
         playButton.textContent = "Play";
         playButton.addEventListener("click", () => {
-            const userProgress = AniList.GetUserProgress(entryRowInfo);
-            if (!userProgress) {
+            const episodeProgress = AniListScraper.GetEpisodeProgress(entryRowChildren);
+            if (!episodeProgress) {
                 return;
             }
-
-            playButton.textContent += " " + userProgress;
         });
 
-        entryRow.insertBefore(playButton, entryRowInfo.titleEl.nextSibling);
+        entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
     }
 }
