@@ -32,11 +32,11 @@ export default class ConsumetAniListClient extends ConsumetClient {
     }
 }
 
-type AnimeInfo = {
+export type AnimeInfo = {
     episodes: Episode[];
 };
 
-type Episode = {
+export type Episode = {
     id: string;
     number: number;
 };
