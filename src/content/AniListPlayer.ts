@@ -18,12 +18,11 @@ export default class AniListPlayer {
         const playButton = document.createElement("button");
         playButton.textContent = "Play";
         playButton.addEventListener("click", async () => {
-            const episodeProgress = AniListScraper.GetEpisodeProgress(entryRowChildren);
-            if (!episodeProgress) {
+            const episodeNumber = AniListScraper.GetEpisodeNumber(entryRowChildren);
+            if (!episodeNumber) {
                 return;
             }
 
-            const episodeNumber = episodeProgress + 1;
             const episode = await ConsumetAniListClient.GetEpisode(aniListId, episodeNumber);
             if (!episode) {
                 return;
@@ -58,16 +57,18 @@ export default class AniListPlayer {
         hls.loadSource(videoUrl);
         hls.attachMedia(videoPlayer);
 
-        videoPlayer.requestFullscreen().catch(console.error);
-
-        videoPlayer.addEventListener("ended", () => {
-            document.body.removeChild(videoPlayer);
-        });
-
-        document.addEventListener("fullscreenchange", () => {
-            if (!document.fullscreenElement) {
-                document.body.removeChild(videoPlayer);
+        function handleEscapeListener(e: KeyboardEvent): void {
+            if (e.key === "Escape") {
+                removeVideoPlayer();
             }
-        });
+        }
+
+        function removeVideoPlayer(): void {
+            hls.destroy();
+            document.body.removeChild(videoPlayer);
+            document.removeEventListener("keydown", handleEscapeListener);
+        }
+
+        document.addEventListener("keydown", handleEscapeListener);
     }
 }
