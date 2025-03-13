@@ -33,6 +33,7 @@ export default class AniListPlayer {
                 return;
             }
 
+            // TODO: Add option for user to chose subtitles language.
             AniListPlayer.PlayVideoHls(episodeSources.sources[0].url, episodeSources.subtitles[0]);
         });
 
