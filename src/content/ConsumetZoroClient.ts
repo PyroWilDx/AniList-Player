@@ -28,28 +28,28 @@ export default class ConsumetZoroClient extends ConsumetClient {
     }
 }
 
-type EpisodeSources = {
+export type EpisodeSources = {
     intro: Intro;
     outro: Outro;
     sources: Source[];
     subtitles: Subtitle[];
 };
 
-type Intro = {
+export type Intro = {
     start: number;
     end: number;
 };
 
-type Outro = {
+export type Outro = {
     start: number;
     end: number;
 };
 
-type Source = {
+export type Source = {
     url: string;
 };
 
-type Subtitle = {
+export type Subtitle = {
     url: string;
     lang: string;
 };

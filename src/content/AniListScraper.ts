@@ -92,7 +92,7 @@ export default class AniListScraper {
     }
 }
 
-type EntryRowChildren = {
+export type EntryRowChildren = {
     titleElement: Element;
     titleAnchorElement: HTMLAnchorElement;
     progressElement: Element;
