@@ -8,7 +8,7 @@ export default class ConsumetAniListClient extends ConsumetClient {
     ): Promise<Episode | null> {
         const fetchUrl = `${ConsumetClient.baseApiUrl}/meta/anilist/info/${aniListId}?provider=${episodeProvider}`;
         try {
-            const response = await fetch(fetchUrl);
+            const response = await ConsumetClient.Fetch(fetchUrl);
             if (!response.ok) {
                 console.error(
                     "AniList-Player: Could not fetch anime information.",
@@ -24,6 +24,7 @@ export default class ConsumetAniListClient extends ConsumetClient {
                 }
                 return episode;
             }
+            console.error("AniList-Player: Could not find episode.", animeInfo);
         } catch (error) {
             ConsumetClient.LogFetchError(fetchUrl, error);
         }

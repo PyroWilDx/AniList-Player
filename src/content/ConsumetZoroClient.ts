@@ -10,7 +10,7 @@ export default class ConsumetZoroClient extends ConsumetClient {
             fetchUrl += `&server=${server}`;
         }
         try {
-            const response = await fetch(fetchUrl);
+            const response = await ConsumetClient.Fetch(fetchUrl);
             if (!response.ok) {
                 console.error(
                     "AniList-Player: Could not fetch episode source.",

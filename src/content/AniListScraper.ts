@@ -77,7 +77,7 @@ export default class AniListScraper {
         return regExpMatchArray[1];
     }
 
-    public static GetEpisodeProgress(entryRowChildren: EntryRowChildren): number | null {
+    public static GetEpisodeNumber(entryRowChildren: EntryRowChildren): number | null {
         const textContent = entryRowChildren.progressElement.textContent;
         if (!textContent) {
             console.error(
@@ -87,7 +87,8 @@ export default class AniListScraper {
             return null;
         }
 
-        return parseInt(textContent.replace("+", "").trim().split("/")[0]);
+        const episodeProgress = parseInt(textContent.replace("+", "").trim().split("/")[0]);
+        return episodeProgress + 1;
     }
 }
 
