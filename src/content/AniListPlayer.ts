@@ -33,14 +33,29 @@ export default class AniListPlayer {
                 return;
             }
 
+            const videoUrl = episodeSources.sources[0].url;
             // TODO: Add option for user to chose subtitles language.
-            AniListPlayer.PlayVideoHls(episodeSources.sources[0].url, episodeSources.subtitles[0]);
+            const subtitle = AniListPlayer.GetSubtitle(episodeSources.subtitles, "English");
+            AniListPlayer.PlayVideoHls(videoUrl, subtitle);
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
     }
 
-    public static PlayVideoHls(videoUrl: string, subtitle: Subtitle) {
+    public static GetSubtitle(subtitles: Subtitle[], lang: string): Subtitle | null {
+        let englishSubtitle: Subtitle | null = null;
+        for (const subtitle of subtitles) {
+            if (subtitle.lang === lang) {
+                return subtitle;
+            }
+            if (subtitle.lang === "English") {
+                englishSubtitle = subtitle;
+            }
+        }
+        return englishSubtitle;
+    }
+
+    public static PlayVideoHls(videoUrl: string, subtitle: Subtitle | null) {
         const videoPlayer = document.createElement("video");
         videoPlayer.style.position = "fixed";
         videoPlayer.style.top = "0";
@@ -53,17 +68,16 @@ export default class AniListPlayer {
         videoPlayer.autoplay = true;
         videoPlayer.crossOrigin = "anonymous";
 
-        const subTrack = document.createElement("track");
-        subTrack.kind = "subtitles";
-        subTrack.label = subtitle.lang;
-        subTrack.srclang = subtitle.lang;
-        subTrack.src = subtitle.url;
-        subTrack.default = true;
-
-        videoPlayer.appendChild(subTrack);
-        this.ShowSubtitles(videoPlayer, subtitle);
-
-        console.log(videoPlayer.textTracks);
+        if (subtitle) {
+            const subTrack = document.createElement("track");
+            subTrack.kind = "subtitles";
+            subTrack.label = subtitle.lang;
+            subTrack.srclang = subtitle.lang;
+            subTrack.src = subtitle.url;
+            subTrack.default = true;
+            videoPlayer.appendChild(subTrack);
+            AniListPlayer.ShowSubtitles(videoPlayer, subtitle);
+        }
 
         document.body.appendChild(videoPlayer);
 
