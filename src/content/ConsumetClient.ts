@@ -1,14 +1,34 @@
-export default class ConsumetClient {
-    public static readonly baseApiUrl = "http://localhost:3000";
+import Fetcher from "./Fetcher";
+import Video from "./Video";
 
-    public static async GetEpisodeId_AniList(
+export default class ConsumetClient {
+    private static readonly baseApiUrl = "http://localhost:3000";
+
+    public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
+        const episodeId = await ConsumetClient.GetEpisodeId_AniList(aniListId, episodeNumber);
+        if (!episodeId) {
+            return;
+        }
+
+        const episodeSources = await ConsumetClient.GetEpisodeSources_Zoro(episodeId);
+        if (!episodeSources) {
+            return;
+        }
+
+        const videoUrl = episodeSources.sources[0].url;
+        // TODO: Add option for user to chose subtitles language.
+        const subtitle = ConsumetClient.GetSubtitle_Zoro(episodeSources.subtitles);
+        Video.PlayVideoHls(videoUrl, subtitle?.lang, subtitle?.url);
+    }
+
+    private static async GetEpisodeId_AniList(
         aniListId: string,
         episodeNumber: number,
         episodeProvider: string = "Zoro",
     ): Promise<string | null> {
         const fetchUrl = `${ConsumetClient.baseApiUrl}/meta/anilist/info/${aniListId}?provider=${episodeProvider}`;
         try {
-            const response = await ConsumetClient.Fetch(fetchUrl);
+            const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
                 console.error(
                     "AniList-Player: Could not fetch anime information.",
@@ -17,7 +37,7 @@ export default class ConsumetClient {
                 return null;
             }
 
-            const animeInfo: AnimeInfo = await response.json();
+            const animeInfo: AnimeInfo_AniList = await response.json();
             for (const episode of animeInfo.episodes) {
                 if (episode.number !== episodeNumber) {
                     continue;
@@ -26,21 +46,21 @@ export default class ConsumetClient {
             }
             console.error("AniList-Player: Could not find episode.", animeInfo);
         } catch (error) {
-            ConsumetClient.LogFetchError(fetchUrl, error);
+            Fetcher.LogFetchError(fetchUrl, error);
         }
         return null;
     }
 
-    public static async GetEpisodeSources_Zoro(
+    private static async GetEpisodeSources_Zoro(
         episodeId: string,
         server?: string,
-    ): Promise<EpisodeSources | null> {
+    ): Promise<EpisodeSources_Zoro | null> {
         let fetchUrl = `${ConsumetClient.baseApiUrl}/anime/zoro/watch?episodeId=${episodeId}`;
         if (server) {
             fetchUrl += `&server=${server}`;
         }
         try {
-            const response = await ConsumetClient.Fetch(fetchUrl);
+            const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
                 console.error(
                     "AniList-Player: Could not fetch episode source.",
@@ -49,55 +69,65 @@ export default class ConsumetClient {
                 return null;
             }
 
-            const episodeSources: EpisodeSources = await response.json();
+            const episodeSources: EpisodeSources_Zoro = await response.json();
             return episodeSources;
         } catch (error) {
-            ConsumetClient.LogFetchError(fetchUrl, error);
+            Fetcher.LogFetchError(fetchUrl, error);
         }
         return null;
     }
 
-    private static Fetch(fetchUrl: string): Promise<Response> {
-        console.log("AniList-Player: Fetching " + fetchUrl);
-        return fetch(fetchUrl);
+    private static GetSubtitle_Zoro(subtitles: Subtitle_Zoro[]): Subtitle_Zoro | null {
+        const lang = ConsumetClient.GetSubtitleLang();
+
+        let englishSubtitle: Subtitle_Zoro | null = null;
+        for (const subtitle of subtitles) {
+            if (subtitle.lang === lang) {
+                return subtitle;
+            }
+            if (subtitle.lang === "English") {
+                englishSubtitle = subtitle;
+            }
+        }
+        return englishSubtitle;
     }
 
-    private static LogFetchError(fetchUrl: string, error: unknown): void {
-        console.error("AniList-Player: Fetch error at " + fetchUrl + ".", error);
+    private static GetSubtitleLang(): string {
+        return "English";
     }
 }
 
-export type AnimeInfo = {
-    episodes: Episode[];
+type AnimeInfo_AniList = {
+    episodes: Episode_AniList[];
 };
 
-export type Episode = {
+type Episode_AniList = {
     id: string;
     number: number;
 };
 
-export type EpisodeSources = {
-    intro: Intro;
-    outro: Outro;
-    sources: Source[];
-    subtitles: Subtitle[];
+type EpisodeSources_Zoro = {
+    intro: Intro_Zoro;
+    outro: Outro_Zoro;
+    sources: Source_Zoro[];
+    subtitles: Subtitle_Zoro[];
 };
 
-export type Intro = {
+type Intro_Zoro = {
     start: number;
     end: number;
 };
 
-export type Outro = {
+type Outro_Zoro = {
     start: number;
     end: number;
 };
 
-export type Source = {
+type Source_Zoro = {
     url: string;
 };
 
-export type Subtitle = {
+type Subtitle_Zoro = {
     url: string;
     lang: string;
 };

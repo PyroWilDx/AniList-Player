@@ -1,43 +1,53 @@
+import Fetcher from "./Fetcher";
+
 export default class AniListClient {
+    private static readonly baseApiUrl = "https://graphql.anilist.co";
+
     public static async GetMALId(aniListId: string): Promise<string | null> {
-        const response = await fetch("https://graphql.anilist.co", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                query: `
+        const fetchUrl = AniListClient.baseApiUrl;
+        try {
+            const response = await Fetcher.Fetch(fetchUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query: `
                 query ($id: Int) {
                   Media(id: $id) {
                     idMal
                   }
                 }
               `,
-                variables: { id: parseInt(aniListId) },
-            }),
-        });
+                    variables: { id: parseInt(aniListId) },
+                }),
+            });
 
-        if (!response.ok) {
-            console.error(
-                "AniList-Player: Could not fetch MyAnimeList id.",
-                `HTTP ${response.status}`,
-            );
-            return null;
+            if (!response.ok) {
+                console.error(
+                    "AniList-Player: Could not fetch MyAnimeList id.",
+                    `HTTP ${response.status}`,
+                );
+                return null;
+            }
+
+            const animeInfo: MALId_Response = await response.json();
+            return animeInfo.data.Media.idMal.toString();
+        } catch (error) {
+            Fetcher.LogFetchError(fetchUrl, error);
         }
-
-        const animeInfo: MALId_Response = await response.json();
-        return animeInfo.data.Media.idMal.toString();
+        return null;
     }
 }
 
-export type MALId_Response = {
+type MALId_Response = {
     data: MALId_Data;
 };
 
-export type MALId_Data = {
+type MALId_Data = {
     Media: MALId_Media;
 };
 
-export type MALId_Media = {
+type MALId_Media = {
     idMal: number;
 };
