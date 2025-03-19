@@ -7,7 +7,7 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
     },
     resolve: {
-        extensions: [".ts"],
+        extensions: [".ts", ".js"],
     },
     module: {
         rules: [
@@ -20,7 +20,7 @@ module.exports = {
     },
     mode: "production",
     performance: {
-        maxAssetSize: 1000000,
-        maxEntrypointSize: 1000000,
+        maxAssetSize: 100000000,
+        maxEntrypointSize: 100000000,
     },
 };
