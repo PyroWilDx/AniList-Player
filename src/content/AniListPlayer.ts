@@ -22,7 +22,7 @@ export default class AniListPlayer {
                 return;
             }
 
-            AniListPlayer.PlayEpisode(aniListId, episodeNumber);
+            await AniListPlayer.PlayEpisode(aniListId, episodeNumber);
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
