@@ -25,7 +25,19 @@ export default class AniListClient {
             return null;
         }
 
-        const animeInfo = await response.json();
-        return animeInfo.data.Media.idMal;
+        const animeInfo: MALId_Response = await response.json();
+        return animeInfo.data.Media.idMal.toString();
     }
 }
+
+export type MALId_Response = {
+    data: MALId_Data;
+};
+
+export type MALId_Data = {
+    Media: MALId_Media;
+};
+
+export type MALId_Media = {
+    idMal: number;
+};
