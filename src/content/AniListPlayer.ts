@@ -1,7 +1,7 @@
 import Hls from "hls.js";
+import AniListClient from "./AniListClient";
 import AniListScraper from "./AniListScraper";
-import ConsumetAniListClient from "./ConsumetAniListClient";
-import ConsumetZoroClient, { Subtitle } from "./ConsumetZoroClient";
+import ConsumetClient, { Subtitle } from "./ConsumetClient";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
@@ -23,26 +23,57 @@ export default class AniListPlayer {
                 return;
             }
 
-            const episode = await ConsumetAniListClient.GetEpisode(aniListId, episodeNumber);
-            if (!episode) {
-                return;
-            }
-
-            const episodeSources = await ConsumetZoroClient.GetEpisodeSources(episode.id);
-            if (!episodeSources) {
-                return;
-            }
-
-            const videoUrl = episodeSources.sources[0].url;
-            // TODO: Add option for user to chose subtitles language.
-            const subtitle = AniListPlayer.GetSubtitle(episodeSources.subtitles, "English");
-            AniListPlayer.PlayVideoHls(videoUrl, subtitle);
+            AniListPlayer.PlayEpisode(aniListId, episodeNumber);
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
     }
 
-    public static GetSubtitle(subtitles: Subtitle[], lang: string): Subtitle | null {
+    private static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
+        switch (AniListPlayer.GetProvider()) {
+            case "AniWatch":
+                await AniListPlayer.PlayEpisode_AniWatch(aniListId, episodeNumber);
+                break;
+            case "Consumet":
+                await AniListPlayer.PlayEpisode_Consumet(aniListId, episodeNumber);
+                break;
+        }
+    }
+
+    private static GetProvider(): string {
+        return "AniWatch";
+    }
+
+    private static async PlayEpisode_AniWatch(
+        aniListId: string,
+        episodeNumber: number,
+    ): Promise<void> {
+        console.log(await AniListClient.GetMALId(aniListId));
+    }
+
+    private static async PlayEpisode_Consumet(
+        aniListId: string,
+        episodeNumber: number,
+    ): Promise<void> {
+        const episodeId = await ConsumetClient.GetEpisodeId_AniList(aniListId, episodeNumber);
+        if (!episodeId) {
+            return;
+        }
+
+        const episodeSources = await ConsumetClient.GetEpisodeSources_Zoro(episodeId);
+        if (!episodeSources) {
+            return;
+        }
+
+        const videoUrl = episodeSources.sources[0].url;
+        // TODO: Add option for user to chose subtitles language.
+        const subtitle = AniListPlayer.GetSubtitle_Consumet(episodeSources.subtitles);
+        AniListPlayer.PlayVideoHls(videoUrl, subtitle);
+    }
+
+    private static GetSubtitle_Consumet(subtitles: Subtitle[]): Subtitle | null {
+        const lang = AniListPlayer.GetSubtitleLang_Consmet();
+
         let englishSubtitle: Subtitle | null = null;
         for (const subtitle of subtitles) {
             if (subtitle.lang === lang) {
@@ -55,7 +86,11 @@ export default class AniListPlayer {
         return englishSubtitle;
     }
 
-    public static PlayVideoHls(videoUrl: string, subtitle: Subtitle | null) {
+    private static GetSubtitleLang_Consmet(): string {
+        return "English";
+    }
+
+    private static PlayVideoHls(videoUrl: string, subtitle: Subtitle | null): void {
         const videoPlayer = document.createElement("video");
         videoPlayer.style.position = "fixed";
         videoPlayer.style.top = "0";
@@ -100,7 +135,7 @@ export default class AniListPlayer {
         document.addEventListener("keydown", handleEscapeListener);
     }
 
-    public static ShowSubtitles(videoPlayer: HTMLVideoElement, subtitle: Subtitle) {
+    public static ShowSubtitles(videoPlayer: HTMLVideoElement, subtitle: Subtitle): void {
         for (const textTrack of videoPlayer.textTracks) {
             if (
                 textTrack.kind === "subtitles" &&
