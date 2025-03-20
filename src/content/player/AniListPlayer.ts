@@ -1,6 +1,6 @@
-import AniListScraper from "./AniListScraper";
-import ConsumetClient from "./ConsumetClient";
-import ZoroClient from "./ZoroClient";
+import ConsumetClient from "../client/consumet/ConsumetClient";
+import ZoroClient from "../client/ZoroClient";
+import AniListScraper from "../scraper/AniListScraper";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
@@ -33,8 +33,8 @@ export default class AniListPlayer {
             case "Zoro":
                 await ZoroClient.PlayEpisode(aniListId, episodeNumber);
                 break;
-            case "Consumet":
-                await ConsumetClient.PlayEpisode(aniListId, episodeNumber);
+            case "Consumet_Zoro":
+                await ConsumetClient.PlayEpisode(aniListId, episodeNumber, "Zoro");
                 break;
         }
     }
