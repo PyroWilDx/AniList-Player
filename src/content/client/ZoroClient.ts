@@ -7,13 +7,13 @@ export default class ZoroClient {
     public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
         const zoroId = await MALSyncClient.GetZoroId(aniListId);
         if (!zoroId) {
-            console.error("AniList-Player: Failed to fetch Zoro anime id.");
+            console.error("AniList-Player: Could not fetch Zoro anime id.");
             return;
         }
 
         const episodeId = await ZoroClient.GetEpisodeId(zoroId, episodeNumber);
         if (!episodeId) {
-            console.error("AniList-Player: Failed to fetch Zoro episode id.");
+            console.error("AniList-Player: Could not fetch Zoro episode id.");
             return;
         }
     }
@@ -34,7 +34,7 @@ export default class ZoroClient {
             }
 
             const animeEpisodes: AnimeEpisodes = await response.json();
-            if (!animeEpisodes.sucess) {
+            if (!animeEpisodes.success) {
                 return null;
             }
 
@@ -52,7 +52,7 @@ export default class ZoroClient {
 }
 
 type AnimeEpisodes = {
-    sucess: boolean;
+    success: boolean;
     data: AnimeEpisodeData;
 };
 
