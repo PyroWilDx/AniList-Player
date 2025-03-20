@@ -40,6 +40,7 @@ export default class AniListPlayer {
     }
 
     private static GetProvider(): string {
+        // TODO: Add option for user to chose provider.
         return "Zoro";
     }
 }
