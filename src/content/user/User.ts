@@ -1,7 +1,7 @@
 export default class User {
     public static GetProvider(): string {
         // TODO: Add option for user to chose provider.
-        return "Consumet_Zoro";
+        return "AnimEmbed";
     }
 
     public static GetSubtitleLang(): string {
