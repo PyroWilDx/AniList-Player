@@ -3,7 +3,7 @@ import Fetcher from "./Fetcher";
 export default class AniListClient {
     private static readonly baseApiUrl = "https://graphql.anilist.co";
 
-    public static async GetMalId(aniListId: string): Promise<string | null> {
+    public static async GetMALId(aniListId: string): Promise<string | null> {
         const fetchUrl = AniListClient.baseApiUrl;
         try {
             const response = await Fetcher.Fetch(fetchUrl, {
@@ -31,7 +31,7 @@ export default class AniListClient {
                 return null;
             }
 
-            const animeInfo: MalId_Response = await response.json();
+            const animeInfo: MALId_Response = await response.json();
             return animeInfo.data.Media.idMal.toString();
         } catch (error) {
             Fetcher.LogFetchError(fetchUrl, error);
@@ -40,14 +40,14 @@ export default class AniListClient {
     }
 }
 
-type MalId_Response = {
-    data: MalId_Data;
+type MALId_Response = {
+    data: MALId_Data;
 };
 
-type MalId_Data = {
-    Media: MalId_Media;
+type MALId_Data = {
+    Media: MALId_Media;
 };
 
-type MalId_Media = {
+type MALId_Media = {
     idMal: number;
 };
