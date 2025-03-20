@@ -1,11 +1,11 @@
 import Fetcher from "./Fetcher";
-import MalSyncClient from "./MalSyncClient";
+import MALSyncClient from "./MALSyncClient";
 
 export default class ZoroClient {
     private static readonly baseApiUrl = "https://aniwatch-api-de46.onrender.com";
 
     public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
-        const zoroId = await MalSyncClient.GetZoroId(aniListId);
+        const zoroId = await MALSyncClient.GetZoroId(aniListId);
         if (!zoroId) {
             console.error("AniList-Player: Failed to fetch Zoro anime id.");
             return;
