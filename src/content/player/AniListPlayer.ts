@@ -1,3 +1,4 @@
+import AnimEmbedClient from "../client/AnimEmbedClient";
 import ConsumetClient from "../client/consumet/ConsumetClient";
 import ZoroClient from "../client/ZoroClient";
 import AniListScraper from "../scraper/AniListScraper";
@@ -31,11 +32,16 @@ export default class AniListPlayer {
 
     private static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
         switch (User.GetProvider()) {
+            case "AnimEmbed":
+                await AnimEmbedClient.PlayEpisode(aniListId, episodeNumber);
+                break;
             case "Zoro":
                 await ZoroClient.PlayEpisode(aniListId, episodeNumber);
                 break;
             case "Consumet_Zoro":
                 await ConsumetClient.PlayEpisode(aniListId, episodeNumber, "Zoro");
+                break;
+            default:
                 break;
         }
     }
