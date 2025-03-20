@@ -25,12 +25,12 @@ export default class ConsumetClient {
         }
 
         const videoUrl = episodeSources.sources[0].url;
-        // TODO: Add option for user to chose subtitles language.
         const subtitle = ConsumetZoroClient.GetSubtitle(episodeSources.subtitles);
         Video.PlayVideoHls(videoUrl, subtitle?.lang, subtitle?.url);
     }
 
     public static GetSubtitleLang(): string {
+        // TODO: Add option for user to chose subtitles language.
         return "English";
     }
 }
