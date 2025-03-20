@@ -1,6 +1,7 @@
 import ConsumetClient from "../client/consumet/ConsumetClient";
 import ZoroClient from "../client/ZoroClient";
 import AniListScraper from "../scraper/AniListScraper";
+import User from "../user/User";
 
 export default class AniListPlayer {
     public static GeneratePlayButton(entryRow: HTMLElement): void {
@@ -29,7 +30,7 @@ export default class AniListPlayer {
     }
 
     private static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
-        switch (AniListPlayer.GetProvider()) {
+        switch (User.GetProvider()) {
             case "Zoro":
                 await ZoroClient.PlayEpisode(aniListId, episodeNumber);
                 break;
@@ -37,10 +38,5 @@ export default class AniListPlayer {
                 await ConsumetClient.PlayEpisode(aniListId, episodeNumber, "Zoro");
                 break;
         }
-    }
-
-    private static GetProvider(): string {
-        // TODO: Add option for user to chose provider.
-        return "Zoro";
     }
 }
