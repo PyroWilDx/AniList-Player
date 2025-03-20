@@ -16,21 +16,28 @@ export default class ConsumetClient {
             episodeProvider,
         );
         if (!episodeId) {
+            console.error("AniList-Player: Could not fetch Zoro episode id.");
             return;
         }
 
+        switch (episodeProvider) {
+            case "Zoro":
+                ConsumetClient.PlayEpisodeZoro(episodeId);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static async PlayEpisodeZoro(episodeId: string) {
         const episodeSources = await ConsumetZoroClient.GetEpisodeSources(episodeId);
         if (!episodeSources) {
+            console.error("AniList-Player: Could not fetch Zoro episode sources.");
             return;
         }
 
         const videoUrl = episodeSources.sources[0].url;
         const subtitle = ConsumetZoroClient.GetSubtitle(episodeSources.subtitles);
         Video.PlayVideoHls(videoUrl, subtitle?.lang, subtitle?.url);
-    }
-
-    public static GetSubtitleLang(): string {
-        // TODO: Add option for user to chose subtitles language.
-        return "English";
     }
 }

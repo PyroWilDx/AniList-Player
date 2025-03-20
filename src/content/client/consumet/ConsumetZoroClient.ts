@@ -1,3 +1,4 @@
+import User from "../../user/User";
 import Fetcher from "../Fetcher";
 import ConsumetClient from "./ConsumetClient";
 
@@ -29,7 +30,7 @@ export default class ConsumetZoroClient {
     }
 
     public static GetSubtitle(subtitles: Subtitle[]): Subtitle | null {
-        const lang = ConsumetClient.GetSubtitleLang();
+        const lang = User.GetSubtitleLang();
 
         let englishSubtitle: Subtitle | null = null;
         for (const subtitle of subtitles) {
