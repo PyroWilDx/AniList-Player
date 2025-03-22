@@ -56,6 +56,9 @@ export default class ZoroClient {
                 }
                 return episode.episodeId;
             }
+            if (animeEpisodes.data.episodes.length !== 0) {
+                return animeEpisodes.data.episodes[0].episodeId;
+            }
         } catch (error) {
             Fetcher.LogFetchError(fetchUrl, error);
         }

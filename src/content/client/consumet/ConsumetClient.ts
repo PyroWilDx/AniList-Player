@@ -16,7 +16,7 @@ export default class ConsumetClient {
             episodeProvider,
         );
         if (!episodeId) {
-            console.error("AniList-Player: Could not fetch Zoro episode id.");
+            console.error(`AniList-Player: Could not fetch ${episodeProvider} episode id.`);
             return;
         }
 

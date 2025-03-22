@@ -25,7 +25,9 @@ export default class ConsumetAniListClient {
                 }
                 return episode.id;
             }
-            console.error("AniList-Player: Could not find episode.", animeInfo);
+            if (animeInfo.episodes.length !== 0) {
+                return animeInfo.episodes[0].id;
+            }
         } catch (error) {
             Fetcher.LogFetchError(fetchUrl, error);
         }

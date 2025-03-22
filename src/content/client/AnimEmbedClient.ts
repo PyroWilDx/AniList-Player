@@ -45,6 +45,9 @@ export default class AnimEmbedClient {
                 }
                 return episodeVostFr.embed.replace("http://", "https://");
             }
+            if (animeEpisodes.data.episodes_vostfr.length !== 0) {
+                return animeEpisodes.data.episodes_vostfr[0].embed.replace("http://", "https://");
+            }
         } catch (error) {
             Fetcher.LogFetchError(fetchUrl, error);
         }
