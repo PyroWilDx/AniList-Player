@@ -3,6 +3,7 @@
     "name": "AniList-Player",
     "version": "1.0",
     "description": "AniList-Player",
+    "permissions": ["storage"],
     "icons": {
         "16": "res/imgs/icons/icon16.png",
         "48": "res/imgs/icons/icon48.png",
