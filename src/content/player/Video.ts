@@ -86,7 +86,7 @@ export default class Video {
         document.body.appendChild(videoContainer);
     }
 
-    private static AddExitListener(animePlayer: HTMLElement, onExit?: () => void): void {
+    private static AddExitListener(videoContainer: HTMLElement, onExit?: () => void): void {
         function handleEscapeListener(e: KeyboardEvent): void {
             if (e.key === "Escape" || e.key === "Backspace" || e.key === "Delete") {
                 removeVideoPlayer();
@@ -97,7 +97,7 @@ export default class Video {
             if (onExit) {
                 onExit();
             }
-            document.body.removeChild(animePlayer);
+            document.body.removeChild(videoContainer);
             window.removeEventListener("keydown", handleEscapeListener);
         }
 
