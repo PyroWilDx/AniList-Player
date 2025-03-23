@@ -5,6 +5,11 @@ import AniListScraper from "../scraper/AniListScraper";
 import User from "../user/User";
 
 export default class AniListPlayer {
+    private static readonly playButtonTextContent = "Play";
+    private static readonly playButtonTextColor = "white";
+    private static readonly playButtonMouseOutColor = "#FF5B61";
+    private static readonly playButtonMouseInColor = "#FF2A30";
+
     public static GeneratePlayButton(entryRow: HTMLElement): void {
         const entryRowChildren = AniListScraper.GetEntryRowChildren(entryRow);
         if (!entryRowChildren) {
@@ -22,16 +27,18 @@ export default class AniListPlayer {
         playButton.style.alignItems = "center";
         playButton.style.justifyContent = "center";
         playButton.style.padding = "8px 16px";
-        playButton.textContent = "Play";
+        playButton.textContent = AniListPlayer.playButtonTextContent;
         playButton.style.fontSize = "18px";
         playButton.style.fontWeight = "bold";
-        playButton.style.color = "white";
-        playButton.style.backgroundColor = "#FF0000";
+        playButton.style.color = AniListPlayer.playButtonTextColor;
+        playButton.style.backgroundColor = AniListPlayer.playButtonMouseOutColor;
         playButton.style.border = "none";
         playButton.style.borderRadius = "8px";
         playButton.style.transition = "background 0.2s ease";
-        playButton.onmouseover = () => (playButton.style.backgroundColor = "#CC0000");
-        playButton.onmouseout = () => (playButton.style.backgroundColor = "#FF0000");
+        playButton.onmouseover = () =>
+            (playButton.style.backgroundColor = AniListPlayer.playButtonMouseInColor);
+        playButton.onmouseout = () =>
+            (playButton.style.backgroundColor = AniListPlayer.playButtonMouseOutColor);
         playButton.addEventListener("click", async () => {
             const playButtonSize = playButton.getBoundingClientRect();
             playButton.textContent = "";
@@ -41,7 +48,7 @@ export default class AniListPlayer {
             const loaderIcon = document.createElement("div");
             loaderIcon.style.width = "24px";
             loaderIcon.style.height = "24px";
-            loaderIcon.style.border = "3.2px solid white";
+            loaderIcon.style.border = `3.2px solid ${AniListPlayer.playButtonTextColor}`;
             loaderIcon.style.borderTop = "3.2px solid transparent";
             loaderIcon.style.borderRadius = "50%";
             loaderIcon.style.animation = "spin-anilist-player 1s linear infinite";
@@ -55,7 +62,7 @@ export default class AniListPlayer {
 
             await AniListPlayer.PlayEpisode(aniListId, episodeNumber);
 
-            playButton.textContent = "Play";
+            playButton.textContent = AniListPlayer.playButtonTextContent;
             playButton.style.width = "";
             playButton.style.height = "";
         });
