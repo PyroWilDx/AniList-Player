@@ -71,7 +71,8 @@ export default class AniListPlayer {
     }
 
     private static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
-        switch (User.GetProvider()) {
+        const provider = await User.GetProvider();
+        switch (provider) {
             case "AnimEmbed":
                 await AnimEmbedClient.PlayEpisode(aniListId, episodeNumber);
                 break;
