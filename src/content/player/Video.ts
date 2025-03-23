@@ -2,61 +2,21 @@ import Hls from "hls.js";
 
 export default class Video {
     public static PlayVideoEmbed(videoUrl: string): void {
-        const videoContainer = document.createElement("div");
-        videoContainer.style.display = "flex";
-        videoContainer.style.position = "fixed";
-        videoContainer.style.top = "0";
-        videoContainer.style.left = "0";
-        videoContainer.style.width = "100%";
-        videoContainer.style.height = "100%";
-        videoContainer.style.zIndex = "10000";
-
         const iFrame = document.createElement("iframe");
-        iFrame.src = videoUrl;
-        iFrame.style.width = "96%";
-        iFrame.style.height = "100%";
-        iFrame.width = iFrame.style.width;
-        iFrame.height = iFrame.style.height;
         iFrame.style.border = "none";
+        iFrame.src = videoUrl;
         iFrame.allowFullscreen = true;
 
-        const closeButton = document.createElement("div");
-        closeButton.style.cursor = "pointer";
-        closeButton.style.display = "flex";
-        closeButton.style.justifyContent = "center";
-        closeButton.style.alignItems = "center";
-        closeButton.style.width = "4%";
-        closeButton.style.height = "100%";
-        closeButton.style.backgroundColor = "red";
-        closeButton.addEventListener("click", () => {
+        Video.GenerateVideoContainer(iFrame, () => {
             iFrame.src = "about:blank";
-            document.body.removeChild(videoContainer);
         });
-
-        const closeIcon = document.createElement("span");
-        closeIcon.textContent = "×";
-        closeIcon.style.fontSize = "4rem";
-        closeIcon.style.color = "white";
-
-        closeButton.appendChild(closeIcon);
-
-        videoContainer.appendChild(iFrame);
-        videoContainer.appendChild(closeButton);
-
-        document.body.appendChild(videoContainer);
 
         console.log("AniList-Player: Playing embed video.", videoUrl);
     }
 
     public static PlayVideoHls(videoUrl: string, subLang?: string, subUrl?: string): void {
         const videoPlayer = document.createElement("video");
-        videoPlayer.style.position = "fixed";
-        videoPlayer.style.top = "0";
-        videoPlayer.style.left = "0";
-        videoPlayer.style.width = "100%";
-        videoPlayer.style.height = "100%";
         videoPlayer.style.backgroundColor = "black";
-        videoPlayer.style.zIndex = "10000";
         videoPlayer.controls = true;
         videoPlayer.autoplay = true;
         videoPlayer.crossOrigin = "anonymous";
@@ -72,20 +32,61 @@ export default class Video {
             Video.ShowSubtitles(videoPlayer, subLang);
         }
 
-        document.body.appendChild(videoPlayer);
-
         const hls = new Hls();
         hls.loadSource(videoUrl);
         hls.attachMedia(videoPlayer);
 
-        Video.AddControls(videoPlayer, () => {
+        Video.GenerateVideoContainer(videoPlayer, () => {
             hls.destroy();
         });
 
         console.log("AniList-Player: Playing HLS video.", videoUrl);
     }
 
-    private static AddControls(animePlayer: HTMLElement, onRemove?: () => void): void {
+    private static GenerateVideoContainer(videoPlayer: HTMLElement, onExit?: () => void): void {
+        videoPlayer.style.width = "96%";
+        videoPlayer.style.height = "100%";
+
+        const videoContainer = document.createElement("div");
+        videoContainer.style.display = "flex";
+        videoContainer.style.position = "fixed";
+        videoContainer.style.top = "0";
+        videoContainer.style.left = "0";
+        videoContainer.style.width = "100%";
+        videoContainer.style.height = "100%";
+        videoContainer.style.zIndex = "10000";
+
+        const closeButton = document.createElement("div");
+        closeButton.style.cursor = "pointer";
+        closeButton.style.display = "flex";
+        closeButton.style.justifyContent = "center";
+        closeButton.style.alignItems = "center";
+        closeButton.style.width = "4%";
+        closeButton.style.height = "100%";
+        closeButton.style.backgroundColor = "red";
+        closeButton.addEventListener("click", () => {
+            if (onExit) {
+                onExit();
+            }
+            document.body.removeChild(videoContainer);
+        });
+
+        const closeIcon = document.createElement("span");
+        closeIcon.textContent = "×";
+        closeIcon.style.fontSize = "4rem";
+        closeIcon.style.color = "white";
+
+        closeButton.appendChild(closeIcon);
+
+        videoContainer.appendChild(videoPlayer);
+        videoContainer.appendChild(closeButton);
+
+        Video.AddExitListener(videoContainer, onExit);
+
+        document.body.appendChild(videoContainer);
+    }
+
+    private static AddExitListener(animePlayer: HTMLElement, onExit?: () => void): void {
         function handleEscapeListener(e: KeyboardEvent): void {
             if (e.key === "Escape" || e.key === "Backspace" || e.key === "Delete") {
                 removeVideoPlayer();
@@ -93,8 +94,8 @@ export default class Video {
         }
 
         function removeVideoPlayer(): void {
-            if (onRemove) {
-                onRemove();
+            if (onExit) {
+                onExit();
             }
             document.body.removeChild(animePlayer);
             window.removeEventListener("keydown", handleEscapeListener);
