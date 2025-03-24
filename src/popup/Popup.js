@@ -1,8 +1,12 @@
 const enabledSwitch = document.getElementById("enabled-switch");
 const providersSelect = document.getElementById("providers-select");
 
+const animEmbedOpt = document.getElementById("anim-embed-opt");
+
 const zoroOpt = document.getElementById("zoro-opt");
 const zoroModeSelect = document.getElementById("zoro-mode-select");
+
+const consumetZoroOpt = document.getElementById("consumet-zoro-opt");
 
 chrome.storage.sync.get(["enabled", "provider", "zoroMode"], (result) => {
     if (result.enabled !== undefined) {
@@ -69,15 +73,19 @@ function InitLabelHints() {
 }
 
 function DisplayProviderOpt() {
+    animEmbedOpt.style.display = "none";
     zoroOpt.style.display = "none";
+    consumetZoroOpt.style.display = "none";
 
     switch (providersSelect.value) {
         case "AnimEmbed":
+            animEmbedOpt.style.display = "";
             break;
         case "Zoro":
             zoroOpt.style.display = "";
             break;
         case "Consumet_Zoro":
+            consumetZoroOpt.style.display = "";
             break;
         default:
             break;
