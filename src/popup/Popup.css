@@ -37,11 +37,32 @@ select {
 }
 
 .row-opt {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     margin-top: 16px;
+}
+
+.hint {
+    position: absolute;
+    background-color: #333333;
+    color: var(--base-text-color);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: none;
+    z-index: 10;
+    max-width: 200px;
+    word-wrap: break-word;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.row-opt label:hover + .hint {
+    display: block;
 }
 
 .switch {
