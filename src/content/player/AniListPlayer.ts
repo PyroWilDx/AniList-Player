@@ -10,6 +10,8 @@ export default class AniListPlayer {
     private static readonly playButtonMouseOutColor = "#FF5B61";
     private static readonly playButtonMouseInColor = "#FF2A30";
 
+    private static playButtonClicked = false;
+
     public static GeneratePlayButton(entryRow: HTMLElement): void {
         const entryRowChildren = AniListScraper.GetEntryRowChildren(entryRow);
         if (!entryRowChildren) {
@@ -40,6 +42,11 @@ export default class AniListPlayer {
         playButton.onmouseout = () =>
             (playButton.style.backgroundColor = AniListPlayer.playButtonMouseOutColor);
         playButton.addEventListener("click", async () => {
+            if (AniListPlayer.playButtonClicked) {
+                return;
+            }
+            AniListPlayer.playButtonClicked = true;
+
             const playButtonSize = playButton.getBoundingClientRect();
             playButton.textContent = "";
             playButton.style.width = `${playButtonSize.width}px`;
@@ -65,6 +72,8 @@ export default class AniListPlayer {
             playButton.textContent = AniListPlayer.playButtonTextContent;
             playButton.style.width = "";
             playButton.style.height = "";
+
+            AniListPlayer.playButtonClicked = false;
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
