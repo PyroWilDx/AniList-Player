@@ -21,6 +21,17 @@ export default class User {
         });
     }
 
+    public static GetZoroMode(): Promise<string> {
+        return new Promise<string>((resolve) => {
+            chrome.storage.sync.get(["zoroMode"], (result) => {
+                if (result.zoroMode === undefined) {
+                    resolve("Embed");
+                }
+                resolve(result.zoroMode);
+            });
+        });
+    }
+
     public static GetSubtitleLang(): string {
         // TODO: Add option for user to chose subtitles language.
         return "English";
