@@ -1,17 +1,33 @@
-const providersOpt = document.getElementById("providers-opt");
+const enabledSwitch = document.getElementById("enabled-switch");
+const providersSelect = document.getElementById("providers-select");
 
-chrome.storage.sync.get(["provider"], (result) => {
-    if (result.provider) {
-        providersOpt.value = result.provider;
+chrome.storage.sync.get(["enabled", "provider"], (result) => {
+    if (result.enabled !== undefined) {
+        enabledSwitch.checked = result.enabled;
     } else {
-        providersOpt.value = "AnimEmbed";
-        StoreProvider("AnimEmbed");
+        enabledSwitch.checked = true;
+        StoreEnabled(enabledSwitch.checked);
+    }
+
+    if (result.provider !== undefined) {
+        providersSelect.value = result.provider;
+    } else {
+        providersSelect.value = "AnimEmbed";
+        StoreProvider(providersSelect.value);
     }
 });
 
-providersOpt.addEventListener("change", () => {
-    StoreProvider(providersOpt.value);
+enabledSwitch.addEventListener("change", () => {
+    StoreEnabled(enabledSwitch.checked);
 });
+
+providersSelect.addEventListener("change", () => {
+    StoreProvider(providersSelect.value);
+});
+
+function StoreEnabled(enabled) {
+    chrome.storage.sync.set({ enabled }, () => {});
+}
 
 function StoreProvider(provider) {
     chrome.storage.sync.set({ provider }, () => {});

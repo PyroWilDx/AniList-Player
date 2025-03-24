@@ -1,8 +1,19 @@
 export default class User {
+    public static GetEnabled(): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            chrome.storage.sync.get(["enabled"], (result) => {
+                if (result.enabled === undefined) {
+                    resolve(true);
+                }
+                resolve(result.enabled);
+            });
+        });
+    }
+
     public static GetProvider(): Promise<string> {
         return new Promise<string>((resolve) => {
             chrome.storage.sync.get(["provider"], (result) => {
-                if (!result.provider) {
+                if (result.provider === undefined) {
                     resolve("AnimEmbed");
                 }
                 resolve(result.provider);

@@ -6,9 +6,18 @@
     </head>
     <body>
         <h1>AniList Player</h1>
+
         <div class="row-opt">
-            <label for="providers-opt">Provider</label>
-            <select id="providers-opt">
+            <label for="enabled-switch">Enabled</label>
+            <label class="switch">
+                <input type="checkbox" id="enabled-switch" />
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="row-opt">
+            <label for="providers-select">Provider</label>
+            <select id="providers-select">
                 <option value="AnimEmbed">AnimEmbed</option>
                 <option value="Zoro">Zoro</option>
                 <option value="Consumet_Zoro">Consumet Zoro</option>
