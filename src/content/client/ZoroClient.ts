@@ -66,7 +66,7 @@ export default class ZoroClient {
     }
 
     private static async GetEpisodeSources(episodeId: string): Promise<EpisodeSources | null> {
-        const fetchUrl = `${ZoroClient.baseApiUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}`;
+        const fetchUrl = `${ZoroClient.baseApiUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}&server=hd-2`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
