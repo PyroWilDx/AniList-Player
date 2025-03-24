@@ -26,6 +26,7 @@ chrome.storage.sync.get(["enabled", "provider", "zoroMode"], (result) => {
         StoreZoroMode(zoroModeSelect.value);
     }
 
+    InitLabelHints();
     DisplayProviderOpt();
 });
 
@@ -42,6 +43,30 @@ providersSelect.addEventListener("change", () => {
 zoroModeSelect.addEventListener("change", () => {
     StoreZoroMode(zoroModeSelect.value);
 });
+
+function InitLabelHints() {
+    document.querySelectorAll("label").forEach((label) => {
+        label.addEventListener("mouseenter", () => {
+            const hintText = label.getAttribute("hint");
+            let hintElement = label.hintElement;
+
+            if (!hintElement) {
+                hintElement = document.createElement("div");
+                hintElement.classList.add("hint");
+
+                label.parentElement.appendChild(hintElement);
+                label.hintElement = hintElement;
+            }
+
+            hintElement.style.display = "block";
+            hintElement.textContent = hintText;
+        });
+
+        label.addEventListener("mouseleave", () => {
+            label.hintElement.style.display = "none";
+        });
+    });
+}
 
 function DisplayProviderOpt() {
     zoroOpt.style.display = "none";

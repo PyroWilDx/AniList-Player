@@ -8,7 +8,9 @@
         <h1>AniList Player</h1>
 
         <div class="row-opt">
-            <label for="enabled-switch">Enabled</label>
+            <label for="enabled-switch" hint="Enable AniList-Player on AniList or not."
+                >Enabled</label
+            >
             <label class="switch">
                 <input type="checkbox" id="enabled-switch" />
                 <span class="slider"></span>
@@ -16,7 +18,9 @@
         </div>
 
         <div class="row-opt">
-            <label for="providers-select">Provider</label>
+            <label for="providers-select" hint="Provider to use to find anime episodes."
+                >Provider</label
+            >
             <select id="providers-select">
                 <option value="AnimEmbed">AnimEmbed</option>
                 <option value="Zoro">Zoro</option>
@@ -26,7 +30,11 @@
 
         <div id="zoro-opt">
             <div class="row-opt">
-                <label for="zoro-mode-select">Zoro Mode</label>
+                <label
+                    for="zoro-mode-select"
+                    hint="Mode to use when playing anime episodes from Zoro."
+                    >Zoro Mode</label
+                >
                 <select id="zoro-mode-select">
                     <option value="Open">Open Website</option>
                     <option value="Embed">Embed Website</option>
