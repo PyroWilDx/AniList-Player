@@ -1,40 +1,14 @@
-import Video from "../player/Video";
-import User from "../user/User";
-import Fetcher from "./Fetcher";
-import MALSyncClient from "./MALSyncClient";
+import User from "../../user/User";
+import Fetcher from "../Fetcher";
 
-export default class ZoroClient {
+export default class AniWatchClient {
     private static readonly baseApiUrl = "https://aniwatch-api-de46.onrender.com";
 
-    public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
-        const zoroId = await MALSyncClient.GetZoroId(aniListId);
-        if (!zoroId) {
-            console.error("AniList-Player: Could not fetch Zoro anime id.");
-            return;
-        }
-
-        const episodeId = await ZoroClient.GetEpisodeId(zoroId, episodeNumber);
-        if (!episodeId) {
-            console.error("AniList-Player: Could not fetch Zoro episode id.");
-            return;
-        }
-
-        const episodeSources = await ZoroClient.GetEpisodeSources(episodeId);
-        if (!episodeSources) {
-            console.error("AniList-Player: Could not fetch Zoro episode sources.");
-            return;
-        }
-
-        const videoUrl = episodeSources.data.sources[0].url;
-        const track = ZoroClient.GetTrack(episodeSources.data.tracks);
-        Video.PlayVideoHls(videoUrl, track?.label, track?.file);
-    }
-
-    private static async GetEpisodeId(
+    public static async GetEpisodeId(
         zoroId: string,
         episodeNumber: number,
     ): Promise<string | null> {
-        const fetchUrl = `${ZoroClient.baseApiUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
+        const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
@@ -65,8 +39,8 @@ export default class ZoroClient {
         return null;
     }
 
-    private static async GetEpisodeSources(episodeId: string): Promise<EpisodeSources | null> {
-        const fetchUrl = `${ZoroClient.baseApiUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}&server=hd-2`;
+    public static async GetEpisodeSources(episodeId: string): Promise<EpisodeSources | null> {
+        const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}&server=hd-2`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
