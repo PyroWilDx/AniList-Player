@@ -1,7 +1,21 @@
 export default class Fetcher {
-    public static Fetch(fetchUrl: string, init?: RequestInit): Promise<Response> {
+    private static readonly corsProxy = "https://corsproxy.io";
+
+    public static Fetch(
+        fetchUrl: string,
+        x?: { init?: RequestInit; useCorsProxy?: boolean },
+    ): Promise<Response> {
+        if (x && x.useCorsProxy) {
+            fetchUrl = `${Fetcher.corsProxy}/${fetchUrl}`;
+        }
+
         console.log("AniList-Player: Fetching " + fetchUrl);
-        return fetch(fetchUrl, init);
+
+        if (x && x.init) {
+            return fetch(fetchUrl, x.init);
+        }
+
+        return fetch(fetchUrl);
     }
 
     public static LogFetchError(fetchUrl: string, error: unknown): void {

@@ -1,6 +1,17 @@
 import Hls from "hls.js";
 
 export default class Video {
+    public static EmbedWebsite(srcUrl: string): void {
+        const iFrame = document.createElement("iframe");
+        iFrame.style.border = "none";
+        iFrame.src = srcUrl;
+        iFrame.allowFullscreen = true;
+
+        Video.GenerateVideoContainer(iFrame);
+
+        console.log("AniList-Player: Opening embed website.", srcUrl);
+    }
+
     public static PlayVideoEmbed(videoUrl: string): void {
         const iFrame = document.createElement("iframe");
         iFrame.style.border = "none";
