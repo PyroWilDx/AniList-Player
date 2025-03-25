@@ -7,20 +7,22 @@ export default class AniListClient {
         const fetchUrl = AniListClient.baseApiUrl;
         try {
             const response = await Fetcher.Fetch(fetchUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    query: `
+                init: {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        query: `
                 query ($id: Int) {
                   Media(id: $id) {
                     idMal
                   }
                 }
               `,
-                    variables: { id: parseInt(aniListId) },
-                }),
+                        variables: { id: parseInt(aniListId) },
+                    }),
+                },
             });
 
             if (!response.ok) {
