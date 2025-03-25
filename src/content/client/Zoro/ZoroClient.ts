@@ -18,6 +18,14 @@ export default class ZoroClient {
         const zoroMode = await User.GetZoroMode();
         switch (zoroMode) {
             case "Open": {
+                const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, episodeNumber);
+                if (!episodeNumberId) {
+                    console.error("AniList-Player: Could not fetch Zoro episode id.");
+                    return;
+                }
+
+                const episodeId = `${zoroId}?ep=${episodeNumberId}`;
+                Video.OpenWebsite(`${ZoroClient.baseUrl}/watch/${episodeId}`);
                 break;
             }
 
