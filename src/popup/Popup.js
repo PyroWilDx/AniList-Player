@@ -30,7 +30,7 @@ chrome.storage.sync.get(["enabled", "provider", "zoroMode"], (result) => {
         StoreZoroMode(zoroModeSelect.value);
     }
 
-    InitLabelHints();
+    InitGetHintFn();
     DisplayProviderOpt();
 });
 
@@ -48,26 +48,29 @@ zoroModeSelect.addEventListener("change", () => {
     StoreZoroMode(zoroModeSelect.value);
 });
 
-function InitLabelHints() {
-    document.querySelectorAll("label").forEach((label) => {
-        label.addEventListener("mouseenter", () => {
-            const hintText = label.getAttribute("hint");
-            let hintElement = label.hintElement;
+function InitGetHintFn() {
+    document.querySelectorAll("*").forEach((element) => {
+        if (!element.getHintFn) {
+            return;
+        }
+
+        element.addEventListener("mouseenter", () => {
+            let hintElement = element.hintElement;
 
             if (!hintElement) {
                 hintElement = document.createElement("div");
                 hintElement.classList.add("hint");
 
-                label.parentElement.appendChild(hintElement);
-                label.hintElement = hintElement;
+                element.parentElement.appendChild(hintElement);
+                element.hintElement = hintElement;
             }
 
             hintElement.style.display = "block";
-            hintElement.textContent = hintText;
+            hintElement.textContent = element.getHintFn();
         });
 
-        label.addEventListener("mouseleave", () => {
-            label.hintElement.style.display = "none";
+        element.addEventListener("mouseleave", () => {
+            element.hintElement.style.display = "none";
         });
     });
 }
