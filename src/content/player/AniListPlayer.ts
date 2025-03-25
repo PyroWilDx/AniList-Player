@@ -85,12 +85,15 @@ export default class AniListPlayer {
             case "AnimEmbed":
                 await AnimEmbedClient.PlayEpisode(aniListId, episodeNumber);
                 break;
+
             case "Zoro":
                 await ZoroClient.PlayEpisode(aniListId, episodeNumber);
                 break;
+
             case "Consumet_Zoro":
                 await ConsumetClient.PlayEpisode(aniListId, episodeNumber, "Zoro");
                 break;
+
             default:
                 break;
         }
