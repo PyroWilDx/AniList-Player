@@ -1,6 +1,10 @@
 import Hls from "hls.js";
 
 export default class Video {
+    public static OpenWebsite(srcUrl: string): void {
+        window.open(srcUrl, "_blank");
+    }
+
     public static EmbedWebsite(srcUrl: string): void {
         const iFrame = document.createElement("iframe");
         iFrame.style.border = "none";
