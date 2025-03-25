@@ -1,3 +1,4 @@
+import { EntryRowInfo } from "../../player/AniListPlayer";
 import Video from "../../player/Video";
 import User from "../../user/User";
 import Fetcher from "../Fetcher";
@@ -8,8 +9,8 @@ export default class ZoroClient {
     private static readonly baseUrl = "https://hianime.to";
     private static readonly baseApiUrl = "https://hianime.to/ajax";
 
-    public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
-        const zoroId = await MALSyncClient.GetZoroId(aniListId);
+    public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
+        const zoroId = await MALSyncClient.GetZoroId(z.aniListId);
         if (!zoroId) {
             console.error("AniList-Player: Could not fetch Zoro anime id.");
             return;
@@ -18,31 +19,31 @@ export default class ZoroClient {
         const zoroMode = await User.GetZoroMode();
         switch (zoroMode) {
             case "Open": {
-                const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, episodeNumber);
+                const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, z.episodeNumber);
                 if (!episodeNumberId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
                     return;
                 }
 
                 const episodeId = `${zoroId}?ep=${episodeNumberId}`;
-                Video.OpenWebsite(`${ZoroClient.baseUrl}/watch/${episodeId}`);
+                Video.OpenWebsite(z, `${ZoroClient.baseUrl}/watch/${episodeId}`);
                 break;
             }
 
             case "Embed": {
-                const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, episodeNumber);
+                const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, z.episodeNumber);
                 if (!episodeNumberId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
                     return;
                 }
 
                 const episodeId = `${zoroId}?ep=${episodeNumberId}`;
-                Video.EmbedWebsite(`${ZoroClient.baseUrl}/watch/${episodeId}`);
+                Video.EmbedWebsite(z, `${ZoroClient.baseUrl}/watch/${episodeId}`);
                 break;
             }
 
             case "Fetch": {
-                const episodeId = await AniWatchClient.GetEpisodeId(zoroId, episodeNumber);
+                const episodeId = await AniWatchClient.GetEpisodeId(zoroId, z.episodeNumber);
                 if (!episodeId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
                     return;
@@ -56,7 +57,7 @@ export default class ZoroClient {
 
                 const videoUrl = episodeSources.data.sources[0].url;
                 const track = AniWatchClient.GetTrack(episodeSources.data.tracks);
-                Video.PlayVideoHls(videoUrl, track?.label, track?.file);
+                Video.PlayVideoHls(z, videoUrl, track?.label, track?.file);
                 break;
             }
 

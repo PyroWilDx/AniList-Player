@@ -1,3 +1,4 @@
+import { EntryRowInfo } from "../player/AniListPlayer";
 import Video from "../player/Video";
 import AniListClient from "./AniListClient";
 import Fetcher from "./Fetcher";
@@ -5,17 +6,17 @@ import Fetcher from "./Fetcher";
 export default class AnimEmbedClient {
     private static readonly baseApiUrl = "https://animembed.com";
 
-    public static async PlayEpisode(aniListId: string, episodeNumber: number): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
         const episodeEmbedLink = await AnimEmbedClient.GetEpisodeEmbedLink(
-            aniListId,
-            episodeNumber,
+            z.aniListId,
+            z.episodeNumber,
         );
         if (!episodeEmbedLink) {
             console.error("AniList-Player: Could not fetch AnimEmbed episode embed link.");
             return;
         }
 
-        Video.PlayVideoEmbed(episodeEmbedLink);
+        Video.PlayVideoEmbed(z, episodeEmbedLink);
     }
 
     private static async GetEpisodeEmbedLink(

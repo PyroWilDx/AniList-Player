@@ -1,3 +1,4 @@
+import { EntryRowInfo } from "../../player/AniListPlayer";
 import Video from "../../player/Video";
 import ConsumetAniListClient from "./ConsumetAniListClient";
 import ConsumetZoroClient from "./ConsumetZoroClient";
@@ -5,14 +6,10 @@ import ConsumetZoroClient from "./ConsumetZoroClient";
 export default class ConsumetClient {
     public static readonly baseApiUrl = "http://localhost:3000";
 
-    public static async PlayEpisode(
-        aniListId: string,
-        episodeNumber: number,
-        episodeProvider: string,
-    ): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo, episodeProvider: string): Promise<void> {
         const episodeId = await ConsumetAniListClient.GetEpisodeId(
-            aniListId,
-            episodeNumber,
+            z.aniListId,
+            z.episodeNumber,
             episodeProvider,
         );
         if (!episodeId) {
@@ -22,7 +19,7 @@ export default class ConsumetClient {
 
         switch (episodeProvider) {
             case "Zoro":
-                ConsumetClient.PlayEpisodeZoro(episodeId);
+                ConsumetClient.PlayEpisodeZoro(z, episodeId);
                 break;
 
             default:
@@ -30,7 +27,7 @@ export default class ConsumetClient {
         }
     }
 
-    public static async PlayEpisodeZoro(episodeId: string) {
+    public static async PlayEpisodeZoro(z: EntryRowInfo, episodeId: string) {
         const episodeSources = await ConsumetZoroClient.GetEpisodeSources(episodeId);
         if (!episodeSources) {
             console.error("AniList-Player: Could not fetch Zoro episode sources.");
@@ -39,6 +36,6 @@ export default class ConsumetClient {
 
         const videoUrl = episodeSources.sources[0].url;
         const subtitle = ConsumetZoroClient.GetSubtitle(episodeSources.subtitles);
-        Video.PlayVideoHls(videoUrl, subtitle?.lang, subtitle?.url);
+        Video.PlayVideoHls(z, videoUrl, subtitle?.lang, subtitle?.url);
     }
 }
