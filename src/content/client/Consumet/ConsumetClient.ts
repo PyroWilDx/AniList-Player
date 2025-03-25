@@ -24,6 +24,7 @@ export default class ConsumetClient {
             case "Zoro":
                 ConsumetClient.PlayEpisodeZoro(episodeId);
                 break;
+
             default:
                 break;
         }
