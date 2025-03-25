@@ -1,5 +1,5 @@
 import AnimEmbedClient from "../client/AnimEmbedClient";
-import ConsumetClient from "../client/consumet/ConsumetClient";
+import ConsumetClient from "../client/Consumet/ConsumetClient";
 import ZoroClient from "../client/ZoroClient";
 import AniListScraper from "../scraper/AniListScraper";
 import User from "../user/User";
