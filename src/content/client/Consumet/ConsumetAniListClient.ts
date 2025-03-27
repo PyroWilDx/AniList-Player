@@ -26,6 +26,7 @@ export default class ConsumetAniListClient {
                 return episode.id;
             }
             if (animeInfo.episodes.length !== 0) {
+                z.episodeNumber = 1;
                 return animeInfo.episodes[0].id;
             }
         } catch (error) {
