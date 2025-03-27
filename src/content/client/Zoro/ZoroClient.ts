@@ -43,7 +43,7 @@ export default class ZoroClient {
             }
 
             case "Fetch": {
-                const episodeId = await AniWatchClient.GetEpisodeId(zoroId, z.episodeNumber);
+                const episodeId = await AniWatchClient.GetEpisodeId(zoroId, z);
                 if (!episodeId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
                     return;

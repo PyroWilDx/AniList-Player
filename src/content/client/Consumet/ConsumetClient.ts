@@ -7,11 +7,7 @@ export default class ConsumetClient {
     public static readonly baseApiUrl = "http://localhost:3000";
 
     public static async PlayEpisode(z: EntryRowInfo, episodeProvider: string): Promise<void> {
-        const episodeId = await ConsumetAniListClient.GetEpisodeId(
-            z.aniListId,
-            z.episodeNumber,
-            episodeProvider,
-        );
+        const episodeId = await ConsumetAniListClient.GetEpisodeId(z, episodeProvider);
         if (!episodeId) {
             console.error(`AniList-Player: Could not fetch ${episodeProvider} episode id.`);
             return;

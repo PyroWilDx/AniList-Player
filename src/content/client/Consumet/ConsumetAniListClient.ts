@@ -1,13 +1,13 @@
+import { EntryRowInfo } from "../../player/AniListPlayer";
 import Fetcher from "../Fetcher";
 import ConsumetClient from "./ConsumetClient";
 
 export default class ConsumetAniListClient {
     public static async GetEpisodeId(
-        aniListId: string,
-        episodeNumber: number,
+        z: EntryRowInfo,
         episodeProvider: string,
     ): Promise<string | null> {
-        const fetchUrl = `${ConsumetClient.baseApiUrl}/meta/anilist/info/${aniListId}?provider=${episodeProvider}`;
+        const fetchUrl = `${ConsumetClient.baseApiUrl}/meta/anilist/info/${z.aniListId}?provider=${episodeProvider}`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
@@ -20,7 +20,7 @@ export default class ConsumetAniListClient {
 
             const animeInfo: AnimeInfo = await response.json();
             for (const episode of animeInfo.episodes) {
-                if (episode.number !== episodeNumber) {
+                if (episode.number !== z.episodeNumber) {
                     continue;
                 }
                 return episode.id;
