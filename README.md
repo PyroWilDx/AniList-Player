@@ -2,6 +2,8 @@
 
 [**AniList-Player**](https://github.com/PyroWilDx/AniList-Player/) is a browser extension that enables anime streaming directly on [AniList](https://anilist.co/).
 
+<img src=".readme/AniList.png">
+
 ## Development Set-Up
 
 <div align="center">
