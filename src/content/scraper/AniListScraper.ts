@@ -58,19 +58,12 @@ export default class AniListScraper {
         }
 
         const progressPlusElement = progressElement.querySelector(".plus-progress");
-        if (!progressPlusElement) {
-            console.error(
-                "AniList-Player: Could not find .plus-progress element in .progress element.",
-                entryRow,
-            );
-            return null;
-        }
 
         return {
             titleElement: titleElement,
             titleAnchorElement: titleAnchorElement,
             progressElement: progressElement,
-            progressPlusElement: <HTMLElement>progressPlusElement,
+            progressPlusElement: <HTMLElement | null>progressPlusElement,
         };
     }
 
@@ -106,5 +99,5 @@ type EntryRowChildren = {
     titleElement: Element;
     titleAnchorElement: HTMLAnchorElement;
     progressElement: Element;
-    progressPlusElement: HTMLElement;
+    progressPlusElement: HTMLElement | null;
 };

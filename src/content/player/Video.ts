@@ -128,7 +128,9 @@ export default class Video {
 
             nextButton.appendChild(loaderIcon);
 
-            z.progressPlusElement.click();
+            if (z.progressPlusElement) {
+                z.progressPlusElement.click();
+            }
 
             await AniListPlayer.PlayEpisode({
                 aniListId: z.aniListId,

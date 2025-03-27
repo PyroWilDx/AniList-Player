@@ -107,5 +107,5 @@ export default class AniListPlayer {
 export type EntryRowInfo = {
     aniListId: string;
     episodeNumber: number;
-    progressPlusElement: HTMLElement;
+    progressPlusElement: HTMLElement | null;
 };
