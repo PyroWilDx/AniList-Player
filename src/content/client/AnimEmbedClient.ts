@@ -7,10 +7,7 @@ export default class AnimEmbedClient {
     private static readonly baseApiUrl = "https://animembed.com";
 
     public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
-        const episodeEmbedLink = await AnimEmbedClient.GetEpisodeEmbedLink(
-            z.aniListId,
-            z.episodeNumber,
-        );
+        const episodeEmbedLink = await AnimEmbedClient.GetEpisodeEmbedLink(z);
         if (!episodeEmbedLink) {
             console.error("AniList-Player: Could not fetch AnimEmbed episode embed link.");
             return;
@@ -19,11 +16,8 @@ export default class AnimEmbedClient {
         Video.PlayVideoEmbed(z, episodeEmbedLink);
     }
 
-    private static async GetEpisodeEmbedLink(
-        aniListId: string,
-        episodeNumber: number,
-    ): Promise<string | null> {
-        const malId = await AniListClient.GetMALId(aniListId);
+    private static async GetEpisodeEmbedLink(z: EntryRowInfo): Promise<string | null> {
+        const malId = await AniListClient.GetMALId(z.aniListId);
         if (!malId) {
             return null;
         }
@@ -41,7 +35,7 @@ export default class AnimEmbedClient {
 
             const animeEpisodes: AnimeEpisodes = await response.json();
             for (const episodeVostFr of animeEpisodes.data.episodes_vostfr) {
-                if (episodeVostFr.episode_number !== episodeNumber) {
+                if (episodeVostFr.episode_number !== z.episodeNumber) {
                     continue;
                 }
                 return episodeVostFr.embed.replace("http://", "https://");

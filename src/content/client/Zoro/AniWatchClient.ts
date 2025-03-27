@@ -1,13 +1,11 @@
+import { EntryRowInfo } from "../../player/AniListPlayer";
 import User from "../../user/User";
 import Fetcher from "../Fetcher";
 
 export default class AniWatchClient {
     private static readonly baseApiUrl = "https://aniwatch-api-de46.onrender.com";
 
-    public static async GetEpisodeId(
-        zoroId: string,
-        episodeNumber: number,
-    ): Promise<string | null> {
+    public static async GetEpisodeId(zoroId: string, z: EntryRowInfo): Promise<string | null> {
         const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
@@ -25,7 +23,7 @@ export default class AniWatchClient {
             }
 
             for (const episode of animeEpisodes.data.episodes) {
-                if (episode.number !== episodeNumber) {
+                if (episode.number !== z.episodeNumber) {
                     continue;
                 }
                 return episode.episodeId;
