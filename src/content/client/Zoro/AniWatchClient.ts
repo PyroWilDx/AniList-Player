@@ -29,6 +29,7 @@ export default class AniWatchClient {
                 return episode.episodeId;
             }
             if (animeEpisodes.data.episodes.length !== 0) {
+                z.episodeNumber = 1;
                 return animeEpisodes.data.episodes[0].episodeId;
             }
         } catch (error) {
