@@ -7,11 +7,11 @@ import ConsumetZoroClient from "./ConsumetZoroClient";
 export default class ConsumetClient {
     private static readonly baseApiUrl = "http://localhost:3000";
 
-    public static async PlayEpisode(z: EntryRowInfo, episodeProvider: string): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo, episodeProvider: string): Promise<boolean> {
         const episodeId = await ConsumetAniListClient.GetEpisodeId(z, episodeProvider);
         if (!episodeId) {
             console.error(`AniList-Player: Could not fetch ${episodeProvider} episode id.`);
-            return;
+            return false;
         }
 
         switch (episodeProvider) {
@@ -20,8 +20,10 @@ export default class ConsumetClient {
                 break;
 
             default:
-                break;
+                return false;
         }
+
+        return true;
     }
 
     public static async PlayEpisodeZoro(z: EntryRowInfo, episodeId: string) {

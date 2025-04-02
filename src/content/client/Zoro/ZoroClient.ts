@@ -9,11 +9,11 @@ export default class ZoroClient {
     private static readonly baseUrl = "https://hianime.to";
     private static readonly baseApiUrl = "https://hianime.to/ajax";
 
-    public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo): Promise<boolean> {
         const zoroId = await MALSyncClient.GetZoroId(z.aniListId);
         if (!zoroId) {
             console.error("AniList-Player: Could not fetch Zoro anime id.");
-            return;
+            return false;
         }
 
         const zoroMode = await User.GetZoroMode();
@@ -22,7 +22,7 @@ export default class ZoroClient {
                 const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, z.episodeNumber);
                 if (!episodeNumberId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
-                    return;
+                    return false;
                 }
 
                 const episodeId = `${zoroId}?ep=${episodeNumberId}`;
@@ -34,7 +34,7 @@ export default class ZoroClient {
                 const episodeNumberId = await ZoroClient.GetEpisodeId(zoroId, z.episodeNumber);
                 if (!episodeNumberId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
-                    return;
+                    return false;
                 }
 
                 const episodeId = `${zoroId}?ep=${episodeNumberId}`;
@@ -46,13 +46,13 @@ export default class ZoroClient {
                 const episodeId = await AniWatchClient.GetEpisodeId(zoroId, z);
                 if (!episodeId) {
                     console.error("AniList-Player: Could not fetch Zoro episode id.");
-                    return;
+                    return false;
                 }
 
                 const episodeSources = await AniWatchClient.GetEpisodeSources(episodeId);
                 if (!episodeSources) {
                     console.error("AniList-Player: Could not fetch Zoro episode sources.");
-                    return;
+                    return false;
                 }
 
                 const videoUrl = episodeSources.data.sources[0].url;
@@ -62,8 +62,10 @@ export default class ZoroClient {
             }
 
             default:
-                break;
+                return false;
         }
+
+        return true;
     }
 
     private static async GetEpisodeId(

@@ -132,13 +132,17 @@ export default class Video {
                 z.progressPlusElement.click();
             }
 
-            await AniListPlayer.PlayEpisode({
+            const playSucess = await AniListPlayer.PlayEpisode({
                 aniListId: z.aniListId,
                 episodeNumber: z.episodeNumber + 1,
                 progressPlusElement: z.progressPlusElement,
             });
 
             closeButton.click();
+
+            if (!playSucess) {
+                alert("Failed to play episode.");
+            }
         });
         closeButton.addEventListener("click", () => {
             if (onExit) {
