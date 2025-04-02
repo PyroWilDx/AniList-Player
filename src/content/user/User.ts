@@ -32,6 +32,28 @@ export default class User {
         });
     }
 
+    public static GetZoroApi(): Promise<string> {
+        return new Promise<string>((resolve) => {
+            chrome.storage.sync.get(["zoroApi"], (result) => {
+                if (result.zoroApi === undefined) {
+                    resolve("");
+                }
+                resolve(result.zoroApi);
+            });
+        });
+    }
+
+    public static GetConsumetZoroApi(): Promise<string> {
+        return new Promise<string>((resolve) => {
+            chrome.storage.sync.get(["consumetZoroApi"], (result) => {
+                if (result.consumetZoroApi === undefined) {
+                    resolve("");
+                }
+                resolve(result.consumetZoroApi);
+            });
+        });
+    }
+
     public static GetSubtitleLang(): string {
         // TODO: Add option for user to chose subtitles language.
         return "English";
