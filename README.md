@@ -4,6 +4,8 @@
 
 <img src=".readme/AniList.png">
 
+<img src=".readme/Anime.png">
+
 ## Development Set-Up
 
 <div align="center">
