@@ -1,10 +1,11 @@
 import { EntryRowInfo } from "../../player/AniListPlayer";
 import Video from "../../player/Video";
+import User from "../../user/User";
 import ConsumetAniListClient from "./ConsumetAniListClient";
 import ConsumetZoroClient from "./ConsumetZoroClient";
 
 export default class ConsumetClient {
-    public static readonly baseApiUrl = "http://localhost:3000";
+    private static readonly baseApiUrl = "http://localhost:3000";
 
     public static async PlayEpisode(z: EntryRowInfo, episodeProvider: string): Promise<void> {
         const episodeId = await ConsumetAniListClient.GetEpisodeId(z, episodeProvider);
@@ -33,5 +34,13 @@ export default class ConsumetClient {
         const videoUrl = episodeSources.sources[0].url;
         const subtitle = ConsumetZoroClient.GetSubtitle(episodeSources.subtitles);
         Video.PlayVideoHls(z, videoUrl, subtitle?.lang, subtitle?.url);
+    }
+
+    public static async GetBaseApiUrl(): Promise<string> {
+        const userApi = await User.GetConsumetZoroApi();
+        if (userApi === "") {
+            return ConsumetClient.baseApiUrl;
+        }
+        return userApi;
     }
 }

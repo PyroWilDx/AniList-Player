@@ -6,7 +6,8 @@ export default class AniWatchClient {
     private static readonly baseApiUrl = "http://localhost:4000";
 
     public static async GetEpisodeId(zoroId: string, z: EntryRowInfo): Promise<string | null> {
-        const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
+        const baseUrl = await AniWatchClient.GetBaseApiUrl();
+        const fetchUrl = `${baseUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
@@ -39,7 +40,8 @@ export default class AniWatchClient {
     }
 
     public static async GetEpisodeSources(episodeId: string): Promise<EpisodeSources | null> {
-        const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}&server=hd-2`;
+        const baseUrl = await AniWatchClient.GetBaseApiUrl();
+        const fetchUrl = `${baseUrl}/api/v2/hianime/episode/sources?animeEpisodeId=${episodeId}&server=hd-2`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
@@ -77,6 +79,14 @@ export default class AniWatchClient {
             }
         }
         return englishTrack;
+    }
+
+    private static async GetBaseApiUrl(): Promise<string> {
+        const userApi = await User.GetZoroApi();
+        if (userApi === "") {
+            return AniWatchClient.baseApiUrl;
+        }
+        return userApi;
     }
 }
 

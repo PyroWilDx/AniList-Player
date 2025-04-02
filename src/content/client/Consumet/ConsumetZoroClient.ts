@@ -7,7 +7,8 @@ export default class ConsumetZoroClient {
         episodeId: string,
         server?: string,
     ): Promise<EpisodeSources | null> {
-        let fetchUrl = `${ConsumetClient.baseApiUrl}/anime/zoro/watch?episodeId=${episodeId}`;
+        const baseUrl = await ConsumetClient.GetBaseApiUrl();
+        let fetchUrl = `${baseUrl}/anime/zoro/watch?episodeId=${episodeId}`;
         if (server) {
             fetchUrl += `&server=${server}`;
         }

@@ -7,7 +7,8 @@ export default class ConsumetAniListClient {
         z: EntryRowInfo,
         episodeProvider: string,
     ): Promise<string | null> {
-        const fetchUrl = `${ConsumetClient.baseApiUrl}/meta/anilist/info/${z.aniListId}?provider=${episodeProvider}`;
+        const baseUrl = await ConsumetClient.GetBaseApiUrl();
+        const fetchUrl = `${baseUrl}/meta/anilist/info/${z.aniListId}?provider=${episodeProvider}`;
         try {
             const response = await Fetcher.Fetch(fetchUrl);
             if (!response.ok) {
