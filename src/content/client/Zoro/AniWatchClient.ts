@@ -3,7 +3,7 @@ import User from "../../user/User";
 import Fetcher from "../Fetcher";
 
 export default class AniWatchClient {
-    private static readonly baseApiUrl = "https://aniwatch-api-de46.onrender.com";
+    private static readonly baseApiUrl = "http://localhost:4000";
 
     public static async GetEpisodeId(zoroId: string, z: EntryRowInfo): Promise<string | null> {
         const fetchUrl = `${AniWatchClient.baseApiUrl}/api/v2/hianime/anime/${zoroId}/episodes`;
