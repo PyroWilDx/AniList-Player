@@ -67,7 +67,7 @@ export default class AniListPlayer {
                 return;
             }
 
-            await AniListPlayer.PlayEpisode({
+            const playSucess = await AniListPlayer.PlayEpisode({
                 aniListId: aniListId,
                 episodeNumber: episodeNumber,
                 progressPlusElement: entryRowChildren.progressPlusElement,
@@ -78,29 +78,37 @@ export default class AniListPlayer {
             playButton.style.height = "";
 
             AniListPlayer.playButtonClicked = false;
+
+            if (!playSucess) {
+                alert("Failed to play episode.");
+            }
         });
 
         entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
     }
 
-    public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo): Promise<boolean> {
+        let playSuccess = false;
+
         const provider = await User.GetProvider();
         switch (provider) {
             case "AnimEmbed":
-                await AnimEmbedClient.PlayEpisode(z);
+                playSuccess = await AnimEmbedClient.PlayEpisode(z);
                 break;
 
             case "Zoro":
-                await ZoroClient.PlayEpisode(z);
+                playSuccess = await ZoroClient.PlayEpisode(z);
                 break;
 
             case "Consumet_Zoro":
-                await ConsumetClient.PlayEpisode(z, "Zoro");
+                playSuccess = await ConsumetClient.PlayEpisode(z, "Zoro");
                 break;
 
             default:
-                break;
+                return false;
         }
+
+        return playSuccess;
     }
 }
 

@@ -6,14 +6,16 @@ import Fetcher from "./Fetcher";
 export default class AnimEmbedClient {
     private static readonly baseApiUrl = "https://animembed.com";
 
-    public static async PlayEpisode(z: EntryRowInfo): Promise<void> {
+    public static async PlayEpisode(z: EntryRowInfo): Promise<boolean> {
         const episodeEmbedLink = await AnimEmbedClient.GetEpisodeEmbedLink(z);
         if (!episodeEmbedLink) {
             console.error("AniList-Player: Could not fetch AnimEmbed episode embed link.");
-            return;
+            return false;
         }
 
         Video.PlayVideoEmbed(z, episodeEmbedLink);
+
+        return true;
     }
 
     private static async GetEpisodeEmbedLink(z: EntryRowInfo): Promise<string | null> {
