@@ -14,3 +14,19 @@ currElement = document.querySelector("[for='zoro-mode-select']");
 currElement.getHintFn = () => {
     return "How to play anime episodes from Zoro.";
 };
+
+currElement = document.querySelector("[for='zoro-api-input']");
+currElement.getHintFn = () => {
+    return "Check https://github.com/ghoshRitesh12/aniwatch-api/.";
+};
+currElement.addEventListener("click", () => {
+    window.open("https://github.com/ghoshRitesh12/aniwatch-api/", "_blank");
+});
+
+currElement = document.querySelector("[for='consumet-zoro-api-input']");
+currElement.getHintFn = () => {
+    return "Check https://github.com/consumet/api.consumet.org/.";
+};
+currElement.addEventListener("click", () => {
+    window.open("https://github.com/consumet/api.consumet.org/", "_blank");
+});
