@@ -87,9 +87,13 @@ export default class ZoroClient {
             const animeEpisodes: AnimeEpisodes = await response.json();
 
             const htmlDocument = new DOMParser().parseFromString(animeEpisodes.html, "text/html");
-            const episodeElement = htmlDocument.querySelector(`[data-number="${episodeNumber}"]`);
+            let episodeElement = htmlDocument.querySelector(`[data-number="${episodeNumber}"]`);
             if (!episodeElement) {
-                return null;
+                episodeElement = htmlDocument.querySelector(`[data-number="1"]`);
+                if (!episodeElement) {
+                    return null;
+                }
+                return episodeElement.getAttribute("data-id");
             }
             return episodeElement.getAttribute("data-id");
         } catch (error) {
