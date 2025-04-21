@@ -18,15 +18,17 @@ export default class AniListPlayer {
             return;
         }
 
-        const aniListId = AniListScraper.GetAniListId(entryRowChildren);
-        if (!aniListId) {
+        const nextSibling = entryRowChildren.titleElement.nextSibling;
+        if (
+            nextSibling !== null &&
+            nextSibling.textContent === AniListPlayer.playButtonTextContent
+        ) {
             return;
         }
 
-        if (entryRowChildren.titleElement.nextSibling !== null) {
-            if (entryRowChildren.titleElement.nextSibling.textContent == "Play") {
-                return;
-            }
+        const aniListId = AniListScraper.GetAniListId(entryRowChildren);
+        if (!aniListId) {
+            return;
         }
 
         const playButton = document.createElement("button");
@@ -90,7 +92,7 @@ export default class AniListPlayer {
             }
         });
 
-        entryRow.insertBefore(playButton, entryRowChildren.titleElement.nextSibling);
+        entryRow.insertBefore(playButton, nextSibling);
     }
 
     public static async PlayEpisode(z: EntryRowInfo): Promise<boolean> {
