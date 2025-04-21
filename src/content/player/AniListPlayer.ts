@@ -23,6 +23,12 @@ export default class AniListPlayer {
             return;
         }
 
+        if (entryRowChildren.titleElement.nextSibling !== null) {
+            if (entryRowChildren.titleElement.nextSibling.textContent == "Play") {
+                return;
+            }
+        }
+
         const playButton = document.createElement("button");
         playButton.style.cursor = "pointer";
         playButton.style.display = "flex";
