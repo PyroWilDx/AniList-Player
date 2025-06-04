@@ -10,6 +10,11 @@ currElement.getHintFn = () => {
     return "Provider used to find anime episodes.";
 };
 
+currElement = document.querySelector("[for='cors-proxy']");
+currElement.getHintFn = () => {
+    return "Cors proxy to use for requests that needs it.";
+};
+
 currElement = document.querySelector("[for='zoro-mode-select']");
 currElement.getHintFn = () => {
     return "How to play anime episodes from Zoro.";
