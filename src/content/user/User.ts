@@ -21,6 +21,17 @@ export default class User {
         });
     }
 
+    public static GetCorsProxy(): Promise<string> {
+        return new Promise<string>((resolve) => {
+            chrome.storage.sync.get(["corsProxy"], (result) => {
+                if (result.provider === undefined) {
+                    resolve("https://api.codetabs.com/v1/proxy?quest=");
+                }
+                resolve(result.provider);
+            });
+        });
+    }
+
     public static GetZoroMode(): Promise<string> {
         return new Promise<string>((resolve) => {
             chrome.storage.sync.get(["zoroMode"], (result) => {

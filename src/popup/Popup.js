@@ -1,5 +1,6 @@
 const enabledSwitch = document.getElementById("enabled-switch");
 const providersSelect = document.getElementById("providers-select");
+const corsProxyInput = document.getElementById("cors-proxy");
 
 const animEmbedOpt = document.getElementById("anim-embed-opt");
 
@@ -11,7 +12,7 @@ const consumetZoroOpt = document.getElementById("consumet-zoro-opt");
 const consumetZoroApiInput = document.getElementById("consumet-zoro-api-input");
 
 chrome.storage.sync.get(
-    ["enabled", "provider", "zoroMode", "zoroApi", "consumetZoroApi"],
+    ["enabled", "provider", "corsProxy", "zoroMode", "zoroApi", "consumetZoroApi"],
     (result) => {
         if (result.enabled !== undefined) {
             enabledSwitch.checked = result.enabled;
@@ -25,6 +26,13 @@ chrome.storage.sync.get(
         } else {
             providersSelect.value = "AnimEmbed";
             StoreProvider(providersSelect.value);
+        }
+
+        if (result.corsProxy !== undefined) {
+            corsProxyInput.value = result.corsProxy;
+        } else {
+            corsProxyInput.value = "https://api.codetabs.com/v1/proxy?quest=";
+            StoreCorsProxy("https://api.codetabs.com/v1/proxy?quest=");
         }
 
         if (result.zoroMode !== undefined) {
@@ -61,6 +69,15 @@ providersSelect.addEventListener("change", () => {
     StoreProvider(providersSelect.value);
 
     DisplayProviderOpt();
+});
+
+let corsProxyTimeout;
+corsProxyInput.addEventListener("input", () => {
+    clearTimeout(corsProxyTimeout);
+
+    corsProxyTimeout = setTimeout(() => {
+        StoreCorsProxy(corsProxyInput.value);
+    }, 600);
 });
 
 zoroModeSelect.addEventListener("change", () => {
@@ -138,6 +155,10 @@ function StoreEnabled(enabled) {
 
 function StoreProvider(provider) {
     chrome.storage.sync.set({ provider }, () => {});
+}
+
+function StoreCorsProxy(corsProxy) {
+    chrome.storage.sync.set({ corsProxy }, () => {});
 }
 
 function StoreZoroMode(zoroMode) {
