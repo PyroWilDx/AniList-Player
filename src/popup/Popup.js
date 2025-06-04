@@ -1,3 +1,5 @@
+const inputSaveTimeout = 100;
+
 const enabledSwitch = document.getElementById("enabled-switch");
 const providersSelect = document.getElementById("providers-select");
 const corsProxyInput = document.getElementById("cors-proxy");
@@ -77,7 +79,7 @@ corsProxyInput.addEventListener("input", () => {
 
     corsProxyTimeout = setTimeout(() => {
         StoreCorsProxy(corsProxyInput.value);
-    }, 600);
+    }, inputSaveTimeout);
 });
 
 zoroModeSelect.addEventListener("change", () => {
@@ -90,7 +92,7 @@ zoroApiInput.addEventListener("input", () => {
 
     zoroApiTimeout = setTimeout(() => {
         StoreZoroApi(zoroApiInput.value);
-    }, 600);
+    }, inputSaveTimeout);
 });
 
 let consumetZoroApiTimeout;
@@ -99,7 +101,7 @@ consumetZoroApiInput.addEventListener("input", () => {
 
     consumetZoroApiTimeout = setTimeout(() => {
         StoreConsumetZoroApi(consumetZoroApiInput.value);
-    }, 600);
+    }, inputSaveTimeout);
 });
 
 function InitGetHintFn() {
